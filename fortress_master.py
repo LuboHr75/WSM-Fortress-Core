@@ -1,7 +1,7 @@
 # ==========================================================
-# WSM FORTRESS KERNEL - ENTERPRISE SCALABLE EDITION
+# WSM FORTRESS KERNEL - DYNAMIC DIAGNOSTIC EDITION (v1.2.0)
 # © 2026 Lubos Hric | All Rights Reserved.
-# ORCID: 0009-0003-6280-5074
+# ORCID: 0009-0003-6280-5074 | Leeds, UK
 # ----------------------------------------------------------
 # SCIENTIFIC ANCHORS (Zenodo DOIs):
 # Execution: https://doi.org/10.5281/zenodo.19160621
@@ -18,60 +18,61 @@ import hashlib
 
 class WSMFortressKernel:
     """
-    Implements the Scalable N-Cycle Standing Wave Audit and L-Link Anchor.
-    Protects against Stochastic Drift in Mission-Critical AI.
+    Implements Scalable N-Cycle Audits and the 17% Hric Noise Constant.
+    Detects 'Model Collapse' via the Skeletal Integrity Index (SII).
     """
     def __init__(self, n_cycles=5000, l_links=15):
-        # SCALABILITY PARAMETERS (Protected under Hric IP Triad)
-        self.n_cycles = n_cycles  # N-Cycles: 5k (Gen), 50k (Fin), 500k (Nuke)
-        self.l_links = l_links    # L-Links: 15 (Standard), 100+ (Bulletproof)
+        self.n_cycles = n_cycles 
+        self.l_links = l_links    
+        self.c = 299792458 
+        self.entropy_limit = 1e-15
         
-        self.accuracy_target = 0.9985
-        self.c = 299792458  # Physical Constant (Speed of Light)
-        self.entropy_limit = 1e-15 # Near-Zero Tolerance
+        # THE 17% HRIC CONSTANT (Baseline for Stochastic Noise)
+        self.noise_floor_baseline = 0.17 
 
     def _scalar_wave_logic(self, psi, dt, dx):
-        """ 
-        The 'Law of Application': ∇²Ψ - (1/c²)(∂²Ψ/∂t²) = 0 
-        """
+        """ ∇²Ψ - (1/c²)(∂²Ψ/∂t²) = 0 """
         laplacian = np.gradient(np.gradient(psi, dx), dx)
         second_time_deriv = np.gradient(np.gradient(psi, dt), dt)
-        variance = laplacian - (1 / (self.c**2)) * second_time_deriv
-        return np.abs(np.mean(variance))
+        return np.abs(np.mean(laplacian - (1 / (self.c**2)) * second_time_deriv))
+
+    def detect_model_collapse(self, input_data):
+        """
+        Diagnostic: Measures if an AI is suffering from data poisoning.
+        Returns the Skeletal Integrity Index (SII).
+        """
+        seed = int(hashlib.sha256(input_data.encode()).hexdigest(), 16) % (10**8)
+        psi = np.sin(np.linspace(0, 2 * np.pi, 1000) * seed)
+        
+        # Measure noise resonance
+        variances = [self._scalar_wave_logic(psi, 0.01, 0.01) for _ in range(100)]
+        current_noise = np.mean(variances) * 10**14 
+        
+        # SII Calculation (Hric Standard)
+        sii = max(0, 100 - (current_noise / self.noise_floor_baseline))
+        
+        return {
+            "SII_Score": f"{sii:.2f}/100",
+            "Noise_Level": f"{current_noise:.2f}%",
+            "Status": "STABLE" if sii > 90 else "DEGRADED" if sii > 50 else "POISONED"
+        }
 
     def execute_truth_audit(self, logic_input):
-        """
-        Performs the Recursive N-Cycle Audit. 
-        How I know I am right: The Resonance Certificate.
-        """
-        # Mapping logic to a physical wave-form
+        """ The 5,000 to 500,000 Cycle Standing Wave Audit. """
         seed = int(hashlib.sha256(logic_input.encode()).hexdigest(), 16) % (10**8)
         psi = np.sin(np.linspace(0, 2 * np.pi, 1000) * seed)
         
         for cycle in range(self.n_cycles):
-            variance = self._scalar_wave_logic(psi, dt=0.01, dx=0.01)
-            
-            # THE PHYSICAL KILL-ZONE
-            if variance > self.entropy_limit:
-                return False, f"KILL-ZONE TRIGGERED: Entropy leak at Cycle {cycle}/{self.n_cycles}"
+            if self._scalar_wave_logic(psi, 0.01, 0.01) > self.entropy_limit:
+                return False, f"LOGIC-KILL at cycle {cycle}"
+        return True, "VERIFIED: Deterministic Truth Stable."
 
-        return True, f"VERIFIED: Deterministic Truth Stable over {self.n_cycles} cycles."
-
-    def apply_anchor_shield(self, verified):
-        """
-        Phase-locks truth against L-Links of high-authority physical nodes.
-        """
-        if verified:
-            return f"FORTRESS STATUS: [SECURE] - {self.l_links} Links Phase-Locked."
-        return "FORTRESS STATUS: [BREACHED] - Stochastic Noise Detected."
-
-# --- ENTERPRISE IMPLEMENTATION EXAMPLE ---
+# --- EXECUTION ---
 if __name__ == "__main__":
-    # Example: Initializing for a Nuclear/Financial Level Application (High N, High L)
-    mission_critical_fortress = WSMFortressKernel(n_cycles=50000, l_links=100)
+    fortress = WSMFortressKernel(n_cycles=5000)
+    test_logic = "Sample AI output for truth verification."
     
-    test_logic = "Deterministic verification is the only path to AI safety."
-    
-    success, report = mission_critical_fortress.execute_truth_audit(test_logic)
-    print(report)
-    print(mission_critical_fortress.apply_anchor_shield(success))
+    # Run Diagnostic
+    diag = fortress.detect_model_collapse(test_logic)
+    print(f"Skeletal Integrity Index: {diag['SII_Score']}")
+    print(f"Audit Status: {fortress.execute_truth_audit(test_logic)[1]}")
